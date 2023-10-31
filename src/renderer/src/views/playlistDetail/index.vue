@@ -265,13 +265,9 @@ async function genSonglist(playlist) {
 
 function useBrightenKeyword(result: string, keyword) {
   const Reg = new RegExp(keyword, 'ig')
-  const matchingCharacters = result.match(Reg)
   let res = ''
   if (result) {
-    res = result.replace(
-      Reg,
-      `<span style="color: #507DAF;">${matchingCharacters ? matchingCharacters[0] : ''}</span>`
-    )
+    res = result.replace(Reg, `<span style="color: #507DAF;">$&</span>`)
     return res
   }
   return result
