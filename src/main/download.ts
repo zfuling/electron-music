@@ -21,9 +21,17 @@ ipcMain.handle('selectedDirectory', async (_evnet) => {
   return false
 })
 
-ipcMain.handle('downLoadMusic', async (_evnet, url, name, outputPath) => {
+ipcMain.handle('downLoadMusic', async (_evnet, url, name, outputPath, id) => {
   try {
-    const response = await axios.get(url, { responseType: 'stream' })
+    const response = await axios.get(url, {
+      responseType: 'stream',
+      onDownloadProgress: (e) => {
+        // console.log(e)
+        setTimeout(() => {
+          mainWindow.webContents.send('downloadProgress', e?.progress, id)
+        }, 200)
+      }
+    })
     console.log(`${name}-${url.split('=').pop()}`)
     const writer = fs.createWriteStream(resolve(outputPath, `${name}-${url.split('=').pop()}`))
 

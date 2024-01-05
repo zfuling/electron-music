@@ -4,13 +4,14 @@ declare global {
   interface Window {
     electron: ElectronAPI
     api: {
-      windowChange:(type:number)=>any,
-      resizeWindow:(...res)=>any
-      setpalySaate:(...res)=>any
-      selectedDirectory:(...res)=>any
-      downLoadMusic:(...res)=>any,
-      initWatch:(...res)=>any,
-      localDownloadList:(...res)=>any,
+      windowChange: (type: number) => any
+      resizeWindow: (...res) => any
+      setpalySaate: (...res) => any
+      selectedDirectory: (...res) => any
+      downLoadMusic: (...res) => any
+      initWatch: (...res) => any
+      localDownloadList: (...res) => any
+      downloadProgress: (...res) => any
     }
   }
 }

@@ -46,7 +46,17 @@
           </div>
         </template>
         <template #operation="{ row }">
-          <Icon type="xiazai" @click.stop="download(row)"></Icon>
+          <div v-if="row.isDownLoad">
+            <el-progress
+              type="circle"
+              :percentage="row.progress"
+              status="success"
+              width="20"
+              stroke-width="2"
+            />
+          </div>
+
+          <Icon type="xiazai" @click.stop="download(row)" v-else></Icon>
         </template>
       </ZTable>
       <div class="container-comment" v-if="activeTab == 2" ref="commentRef">
@@ -239,7 +249,7 @@ async function initPlayList() {
  *
  * @param playlist 歌单列表
  */
-const tableData = ref([])
+const tableData = ref<any[]>([])
 async function genSonglist(playlist) {
   const trackIds = playlist.trackIds.map(({ id }) => id)
   const songDetails = await getSongDetail(trackIds.slice(0, trackIds.length))
@@ -252,7 +262,9 @@ async function genSonglist(playlist) {
       duration: dt,
       mvId: mv,
       albumName: al.name,
-      img: al.picUrl
+      img: al.picUrl,
+      isDownLoad: false,
+      progress: 0
     })
   )
   tableData.value = result
@@ -294,8 +306,21 @@ const filteredSongs = computed(() => {
 /**
  * 下载歌曲
  */
+
+window.api.downloadProgress((_event, progress, id) => {
+  const progressNum = Math.round(progress * 100)
+  const findIndex = filteredSongs.value.findIndex((item) => item.id === id)
+  tableData.value[findIndex].isDownLoad = true
+  tableData.value[findIndex].progress = progressNum
+  console.log(typeof progressNum)
+  if (progressNum === 100) {
+    tableData.value[findIndex].isDownLoad = false
+    tableData.value[findIndex].progress = 100
+  }
+})
 const router = useRouter()
 async function download(row) {
+  console.log(row)
   if (!muicPath.value) {
     ElMessage({
       duration: 1000,
@@ -315,8 +340,9 @@ async function download(row) {
     ElMessage.warning(res.message === 'ok' ? '当前歌曲需要vip' : res.message)
     return
   }
+  // row.isDownLoad = true
 
-  window.api.downLoadMusic(row.url, row.name, muicPath.value)
+  window.api.downLoadMusic(row.url, row.name, muicPath.value, row.id)
 }
 
 /**

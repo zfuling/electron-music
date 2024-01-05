@@ -1,4 +1,4 @@
-import { contextBridge,ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
@@ -6,23 +6,26 @@ const api = {
   windowChange: (type) => {
     return ipcRenderer.invoke('windowChange', type)
   },
-  resizeWindow: (e)=>{
-    return ipcRenderer.on('resizeWindow',e)
+  resizeWindow: (e) => {
+    return ipcRenderer.on('resizeWindow', e)
   },
-  setpalySaate:(e)=>{
-    return ipcRenderer.on('setpalySaate',e)
+  setpalySaate: (e) => {
+    return ipcRenderer.on('setpalySaate', e)
   },
-  selectedDirectory:(e)=>{
-    return ipcRenderer.invoke('selectedDirectory',e)
+  selectedDirectory: (e) => {
+    return ipcRenderer.invoke('selectedDirectory', e)
   },
-  downLoadMusic:(url,name,outpath)=>{
-    return ipcRenderer.invoke('downLoadMusic',url,name,outpath)
+  downLoadMusic: (url, name, outpath, id) => {
+    return ipcRenderer.invoke('downLoadMusic', url, name, outpath, id)
   },
-  initWatch:(outpath)=>{
-    return ipcRenderer.invoke('initWatch',outpath)
+  initWatch: (outpath) => {
+    return ipcRenderer.invoke('initWatch', outpath)
   },
-  localDownloadList:(e)=>{
-    return ipcRenderer.on('localDownloadList',e)
+  localDownloadList: (e) => {
+    return ipcRenderer.on('localDownloadList', e)
+  },
+  downloadProgress: (process, id) => {
+    return ipcRenderer.on('downloadProgress', process, id)
   }
 }
 
