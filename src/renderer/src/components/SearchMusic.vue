@@ -1,11 +1,7 @@
 <template>
-  <div
-    class="searchContainer"
-    :class="[searchValue ? 'searchContainer-value' : '']"
-    v-if="isSearchFouce"
-  >
+  <div class="searchContainer" :class="[searchValue ? 'searchContainer-value' : '']" v-if="isSearchFouce">
     <div>
-      <HotListVue></HotListVue>
+      <HotList :list="hots"></HotList>
     </div>
   </div>
 </template>
@@ -14,19 +10,37 @@
 import { getSearchHot } from '@renderer/api'
 import { onMounted, ref } from 'vue'
 import { useGlobalStore } from '@renderer/store/global'
-import HotListVue from './HotList.vue'
+import HotList from './HotList.vue'
 import { storeToRefs } from 'pinia'
+import { createSong } from '@renderer/utils'
 const { searchValue, isSearchFouce } = storeToRefs(useGlobalStore())
 onMounted(() => {
   querySearchHot()
 })
 
-const hotList = ref<Record<string, any>>()
+const hots = ref<Record<string, any>[]>()
 
 async function querySearchHot() {
   const res = await getSearchHot()
   if (res.code !== 200) return
-  hotList.value = res.data
+  // const songDetails = await getSongDetail(trackIds.slice(0, trackIds.length))
+  // const result = songDetails.songs.map(({ id, name, al, ar, mv, dt, ...res }) =>
+  //   createSong({
+  //     ...res,
+  //     id,
+  //     name,
+  //     artists: ar,
+  //     duration: dt,
+  //     mvId: mv,
+  //     albumName: al.name,
+  //     img: al.picUrl,
+  //     isDownLoad: false,
+  //     progress: 0
+  //   })
+  // )
+  hots.value = res.data
+  // createSong(hots.value)
+  console.log(hots.value, 'hots')
 }
 </script>
 
@@ -44,7 +58,7 @@ async function querySearchHot() {
     0 4px 8px 0 rgba(0, 0, 0, 0.2),
     0 6px 20px 0 rgba(0, 0, 0, 0.19);
   transition: all 0.5s;
-  padding: 20px;
+  // padding: 20px;
 }
 .searchContainer-value {
   width: 400px;

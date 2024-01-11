@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>热搜榜</div>
+    <div style="margin-left: 20px">热搜榜</div>
     <div class="list">
       <div class="item">
         <div class="rank">1</div>
@@ -25,6 +25,21 @@ console.log(props)
   flex-direction: column;
   .item {
     display: flex;
+    padding: 20px;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--sx-color-hover);
+    }
+
+    .rank {
+      margin-right: 10px;
+      font-size: 16px;
+    }
+    .songInfo {
+      font-size: 14px;
+      font-weight: bold;
+    }
   }
 }
 </style>
