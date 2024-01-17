@@ -117,3 +117,15 @@ export function isFalse(v) {
 export function getPageOffset(page, limit) {
   return page * limit
 }
+export function replaceSearchKeyword(result, keyword) {
+  // 转义正则表达式中的特殊字符
+  const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+  const Reg = new RegExp(escapedKeyword, 'ig')
+  let res = ''
+  if (result) {
+    res = result.replace(Reg, `<span style="color: #507DAF;">$&</span>`)
+    return res
+  }
+  return result
+}

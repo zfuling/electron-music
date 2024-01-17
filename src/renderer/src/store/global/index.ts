@@ -10,7 +10,7 @@ export const useGlobalStore = defineStore(
     const isSearchFouce = ref(false)
     const isListSearch = ref(false)
     const searchHistoryList = ref<any[]>([])
-
+    const sugges = ref<Record<string, any>>({})
     function setTheme(e: string) {
       theme.value = e
     }
@@ -41,7 +41,8 @@ export const useGlobalStore = defineStore(
       searchHistoryList,
       setSearchHistoryList,
       celarSearchHistoryList,
-      isListSearch
+      isListSearch,
+      sugges
     }
   },
   {

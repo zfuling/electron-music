@@ -252,7 +252,6 @@ async function initPlayList() {
 const tableData = ref<any[]>([])
 async function genSonglist(playlist) {
   const trackIds = playlist.trackIds.map(({ id }) => id)
-  console.log(trackIds.slice(0, trackIds.length), '11111')
   const songDetails = await getSongDetail(trackIds.slice(0, trackIds.length))
 
   const result = songDetails.songs.map(({ id, name, al, ar, mv, dt, ...res }) =>

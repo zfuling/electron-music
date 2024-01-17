@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <LayoutHeader />
-    <SearchMusic />
+    <SearchMusic v-if="isSearchFouce" />
     <div v-if="$route.meta?.single">
       <router-view></router-view>
     </div>
@@ -35,6 +35,9 @@ import { computed } from 'vue'
 import { menuRoutes } from '@renderer/router'
 import { Splitpanes, Pane } from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
+import { storeToRefs } from 'pinia'
+import { useGlobalStore } from '@renderer/store/global'
+const { isSearchFouce } = storeToRefs(useGlobalStore())
 /**
  * 需要居中对齐的路由
  */

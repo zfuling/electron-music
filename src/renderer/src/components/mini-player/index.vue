@@ -115,13 +115,13 @@ const {
   setMusicVolume
 } = musicStore
 
-const { isListSearch } = storeToRefs(useGlobalStore())
+const { isListSearch, isSearchFouce } = storeToRefs(useGlobalStore())
 onMounted(() => {
   audio.value.currentTime = currentTime.value
   audio.value.volume = muiscVolume.value
 })
 function handleKeyPress(event) {
-  if (event.keyCode === 32 && !isListSearch.value) {
+  if (event.keyCode === 32 && !isListSearch.value && !isSearchFouce.value) {
     togglePlaying()
   }
 }

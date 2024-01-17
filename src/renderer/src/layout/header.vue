@@ -1,17 +1,20 @@
 <template>
-  <div class="header" :class="[{ 'header-bottom': theme === 'dark' }]" @mousedown="useMoveWindow">
+  <div class="header drag" :class="[{ 'header-bottom': theme === 'dark' }]">
     <div class="left">
       <el-input
-        @mousedown.stop
+        class="nodrag"
         placeholder="search"
         :prefix-icon="Search"
         @focus="isSearchFouce = true"
-        @blur="isSearchFouce = false"
+        @blur="delayBlur"
+        @input="debounceSearch"
         style="height: 30px"
+        @keypress.enter="handleSearch"
         v-model="searchValue"
+        ref="searchInputRef"
       />
     </div>
-    <div class="right" @mousedown.stop>
+    <div class="right nodrag">
       <User></User>
 
       <Theme />
@@ -34,7 +37,9 @@ import { ref } from 'vue'
 import { useGlobalStore } from '@renderer/store/global'
 import _ from 'lodash'
 import { storeToRefs } from 'pinia'
-import { useMoveWindow } from '@renderer/composable/index'
+import { ElMessage } from 'element-plus'
+import { getSearch, getSearchSuggest } from '@renderer/api/index'
+// import { useMoveWindow } from '@renderer/composable/index'
 const isMax = ref(false)
 function windowChange(type) {
   window.api.windowChange(type)
@@ -42,8 +47,41 @@ function windowChange(type) {
 window.api.resizeWindow((_event, value) => {
   isMax.value = value
 })
-const { searchValue, isSearchFouce, theme } = storeToRefs(useGlobalStore())
-// const { theme } = storeToRefs(useGlobalStore())
+const { searchValue, isSearchFouce, theme, sugges } = storeToRefs(useGlobalStore())
+/**
+ * 搜索建议列表
+ */
+const debounceSearch = _.debounce(handlesSuggest, 200)
+async function handlesSuggest() {
+  if (!searchValue.value) return
+  const res = await getSearchSuggest(searchValue.value)
+  if (res.code !== 200) return
+  console.log(111)
+  sugges.value = res.result
+  console.log(sugges.value)
+}
+
+const searchInputRef = ref()
+async function handleSearch() {
+  if (!searchValue.value) {
+    ElMessage({
+      message: '请输入你要搜索的内容',
+      type: 'warning',
+      duration: 1500
+    })
+    return
+  }
+  const res = await getSearch({
+    keywords: searchValue.value
+  })
+  console.log(res)
+  if (searchInputRef.value) searchInputRef.value?.blur()
+}
+function delayBlur() {
+  setTimeout(() => {
+    isSearchFouce.value = false
+  }, 200)
+}
 </script>
 
 <style scoped lang="scss">

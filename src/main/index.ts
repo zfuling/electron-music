@@ -20,19 +20,20 @@ function createWindow(): void {
   })
   ipcMain.on('moveWindow', (event, x, y) => {
     let pos = mainWindow.getPosition()
-    if (mainWindow.isMaximized()) {
-      mainWindow.unmaximize()
-      setTimeout(() => {
-        pos = mainWindow.getPosition()
-        pos[0] += x
-        pos[1] += y
-        mainWindow.setPosition(pos[0], pos[1], true)
-      }, 100) // 增加一个短暂的延迟
-    } else {
-      pos[0] += x
-      pos[1] += y
-      mainWindow.setPosition(pos[0], pos[1], true)
-    }
+    pos[0] += x
+    pos[1] += y
+    mainWindow.setPosition(pos[0], pos[1], true)
+    // if (mainWindow.isMaximized()) {
+    //   mainWindow.unmaximize()
+    //   setTimeout(() => {
+    //     pos = mainWindow.getPosition()
+    //     pos[0] += x
+    //     pos[1] += y
+    //     mainWindow.setPosition(pos[0], pos[1], true)
+    //   }, 100) // 增加一个短暂的延迟
+    // } else {
+
+    // }
   })
 
   mainWindow.on('resize', (_event) => {
