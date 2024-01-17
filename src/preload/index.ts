@@ -26,6 +26,9 @@ const api = {
   },
   downloadProgress: (process, id) => {
     return ipcRenderer.on('downloadProgress', process, id)
+  },
+  moveWindow: (x: number, y: number) => {
+    ipcRenderer.send('moveWindow', x, y)
   }
 }
 

@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, Tray, Menu, nativeImage } from 'electron'
+import { app, shell, BrowserWindow, Tray, Menu, nativeImage, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import logo from '../../resources/logo.png?asset'
@@ -16,6 +16,22 @@ function createWindow(): void {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
+    }
+  })
+  ipcMain.on('moveWindow', (event, x, y) => {
+    let pos = mainWindow.getPosition()
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize()
+      setTimeout(() => {
+        pos = mainWindow.getPosition()
+        pos[0] += x
+        pos[1] += y
+        mainWindow.setPosition(pos[0], pos[1], true)
+      }, 100) // 增加一个短暂的延迟
+    } else {
+      pos[0] += x
+      pos[1] += y
+      mainWindow.setPosition(pos[0], pos[1], true)
     }
   })
 

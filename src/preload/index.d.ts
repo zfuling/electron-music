@@ -12,6 +12,7 @@ declare global {
       initWatch: (...res) => any
       localDownloadList: (...res) => any
       downloadProgress: (...res) => any
+      moveWindow: (x: number, y: number) => void
     }
   }
 }

@@ -1,7 +1,8 @@
 <template>
-  <div class="header drag" :class="[{ 'header-bottom': theme === 'dark' }]">
-    <div class="left nodrag">
+  <div class="header" :class="[{ 'header-bottom': theme === 'dark' }]" @mousedown="useMoveWindow">
+    <div class="left">
       <el-input
+        @mousedown.stop
         placeholder="search"
         :prefix-icon="Search"
         @focus="isSearchFouce = true"
@@ -10,7 +11,7 @@
         v-model="searchValue"
       />
     </div>
-    <div class="right nodrag">
+    <div class="right" @mousedown.stop>
       <User></User>
 
       <Theme />
@@ -33,6 +34,7 @@ import { ref } from 'vue'
 import { useGlobalStore } from '@renderer/store/global'
 import _ from 'lodash'
 import { storeToRefs } from 'pinia'
+import { useMoveWindow } from '@renderer/composable/index'
 const isMax = ref(false)
 function windowChange(type) {
   window.api.windowChange(type)

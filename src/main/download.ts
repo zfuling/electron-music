@@ -24,7 +24,7 @@ ipcMain.handle('selectedDirectory', async (_evnet) => {
 ipcMain.handle('downLoadMusic', async (_evnet, url, name, outputPath, id) => {
   try {
     const response = await axios.get(url, {
-      responseType: 'stream',
+      responseType: 'arraybuffer',
       onDownloadProgress: (e) => {
         // console.log(e)
         setTimeout(() => {
@@ -33,9 +33,9 @@ ipcMain.handle('downLoadMusic', async (_evnet, url, name, outputPath, id) => {
       }
     })
     console.log(`${name}-${url.split('=').pop()}`)
-    const writer = fs.createWriteStream(resolve(outputPath, `${name}-${url.split('=').pop()}`))
-
-    await pipelineAsync(response.data, writer)
+    // const writer = fs.createWriteStream(resolve(outputPath, `${name}-${url.split('=').pop()}`))
+    fs.writeFileSync(resolve(outputPath, `${name}-${url.split('=').pop()}.mp3`), response.data)
+    // await pipelineAsync(response.data, writer)
   } catch (error) {
     console.error('下载音乐时发生错误：', error)
   }

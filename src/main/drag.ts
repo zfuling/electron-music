@@ -8,7 +8,7 @@ ipcMain.handle('windowChange', (_event, type) => {
     },
     2: () => {
       if (currentWindow.isMaximized()) {
-        currentWindow.restore()
+        currentWindow.unmaximize()
       } else {
         currentWindow.maximize()
       }
