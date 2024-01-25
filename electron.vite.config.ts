@@ -15,17 +15,26 @@ export default defineConfig({
         '@renderer': resolve('src/renderer/src')
       }
     },
-    css:{
-      preprocessorOptions:{
-        scss:{
-          additionalData: `@import '@renderer/assets/css/mixin.scss'; @import '@renderer/assets/css/variables.scss';`,
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import '@renderer/assets/css/mixin.scss'; @import '@renderer/assets/css/variables.scss';`
         }
       }
     },
-    plugins: [vue(),createSvgIconsPlugin({
-      iconDirs: [resolve(process.cwd(), 'src/renderer/src/assets/icons')],
-      symbolId: 'icon-[dir]-[name]',
-      customDomId: '__svg__icons__dom__',
-    })]
+    // build: {
+    //   // 指定输出目录，默认是 'dist'
+    //   outDir: 'dist',
+    //   // 启用 emptyOutDir 以在每次构建前清空输出目录
+    //   emptyOutDir: true
+    // },
+    plugins: [
+      vue(),
+      createSvgIconsPlugin({
+        iconDirs: [resolve(process.cwd(), 'src/renderer/src/assets/icons')],
+        symbolId: 'icon-[dir]-[name]',
+        customDomId: '__svg__icons__dom__'
+      })
+    ]
   }
 })

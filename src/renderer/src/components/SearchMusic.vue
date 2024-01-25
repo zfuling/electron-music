@@ -56,13 +56,14 @@ onMounted(() => {
 const hots = ref<Record<string, any>[]>()
 const atviveId = ref<number>()
 function handleKeyDown(e) {
-  if (e.keyCode === 38 && this.selectedIndex > 0) {
-    // 上键
-    this.selectedIndex--
-  } else if (e.keyCode === 40 && this.selectedIndex < this.items.length - 1) {
-    // 下键
-    this.selectedIndex++
-  }
+  console.log(e)
+  // if (e.keyCode === 38 && this.selectedIndex > 0) {
+  //   // 上键
+  //   this.selectedIndex--
+  // } else if (e.keyCode === 40 && this.selectedIndex < this.items.length - 1) {
+  //   // 下键
+  //   this.selectedIndex++
+  // }
 }
 const songs = computed(() => {
   return (

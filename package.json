@@ -15,7 +15,8 @@
     "dev": "chcp 65001 && electron-vite dev -w",
     "build": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:win": "npm run build && electron-builder --win --config",
+    "prebuild": "if exist dist (rmdir /s /q dist && mkdir dist)",
+    "build:win": "npm run prebuild && npm run build && electron-builder --win --config",
     "build:mac": "npm run build && electron-builder --mac --config",
     "build:linux": "npm run build && electron-builder --linux --config"
   },

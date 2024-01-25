@@ -3,10 +3,7 @@ import { mainWindow } from './index'
 import { resolve, extname } from 'path'
 import axios from 'axios'
 import fs from 'fs'
-import { pipeline } from 'stream'
-import { promisify } from 'util'
 let dirName = ''
-const pipelineAsync = promisify(pipeline)
 ipcMain.handle('selectedDirectory', async (_evnet) => {
   const res = await dialog.showOpenDialog(mainWindow, {
     title: '选择音乐下载目录',
@@ -32,10 +29,7 @@ ipcMain.handle('downLoadMusic', async (_evnet, url, name, outputPath, id) => {
         }, 200)
       }
     })
-    console.log(`${name}-${url.split('=').pop()}`)
-    // const writer = fs.createWriteStream(resolve(outputPath, `${name}-${url.split('=').pop()}`))
     fs.writeFileSync(resolve(outputPath, `${name}-${url.split('=').pop()}.mp3`), response.data)
-    // await pipelineAsync(response.data, writer)
   } catch (error) {
     console.error('下载音乐时发生错误：', error)
   }

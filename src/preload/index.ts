@@ -21,11 +21,11 @@ const api = {
   initWatch: (outpath) => {
     return ipcRenderer.invoke('initWatch', outpath)
   },
-  localDownloadList: (e) => {
-    return ipcRenderer.on('localDownloadList', e)
+  localDownloadList: (callback) => {
+    return ipcRenderer.on('localDownloadList', callback)
   },
-  downloadProgress: (process, id) => {
-    return ipcRenderer.on('downloadProgress', process, id)
+  downloadProgress: (callback) => {
+    return ipcRenderer.on('downloadProgress', callback)
   },
   moveWindow: (x: number, y: number) => {
     ipcRenderer.send('moveWindow', x, y)

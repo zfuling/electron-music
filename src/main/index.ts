@@ -18,7 +18,7 @@ function createWindow(): void {
       sandbox: false
     }
   })
-  ipcMain.on('moveWindow', (event, x, y) => {
+  ipcMain.on('moveWindow', (_event, x, y) => {
     let pos = mainWindow.getPosition()
     pos[0] += x
     pos[1] += y
