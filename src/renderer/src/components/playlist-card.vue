@@ -1,8 +1,8 @@
 <template>
-  <div @click="onClickCard" class="playlist-card">
+  <div class="playlist-card" @click="onClickCard">
     <div class="img-wrap">
       <el-image :src="img" class="img-container" lazy />
-      <div class="desc-wrap" v-if="desc">
+      <div v-if="desc" class="desc-wrap">
         <span class="desc">{{ desc }}</span>
       </div>
       <PlayIcon :size="36" class="play-icon" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="searchContainer" :class="[searchValue ? 'searchContainer-value' : '']">
+  <div class="searchContainer">
     <div v-if="searchValue" class="suggest">
       <div v-if="songs.length > 0">
         <div class="title">
@@ -25,12 +25,16 @@
           class="list"
           @click="toPlayList(item.id)"
         >
-          <div class="item" v-html="item?.name"     :class="[+activeId === +item.id ? 'item-active' : '']"></div>
+          <div
+            class="item"
+            :class="[+activeId === +item.id ? 'item-active' : '']"
+            v-html="item?.name"
+          ></div>
         </div>
       </div>
     </div>
     <div v-else>
-      <HotList :list="hots"></HotList>
+      <HotList :list="hots" :activeId="activeId"></HotList>
     </div>
   </div>
 </template>
@@ -44,30 +48,50 @@ import HotList from './HotList.vue'
 import { storeToRefs } from 'pinia'
 import { replaceSearchKeyword, createSong } from '@renderer/utils/index'
 import { useRouter } from 'vue-router'
-const { searchValue, sugges } = storeToRefs(useGlobalStore())
+const { searchValue, sugges, isSearchFouce } = storeToRefs(useGlobalStore())
 const { addToPlaylist, startSong } = useMusicStore()
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown)
   querySearchHot()
 })
-const hots = ref<Record<string, any>[]>()
-const activeId = ref<number>()
+const hots = ref<Record<string, any>[]>([])
+const activeId = ref<number>(0)
 let currentIndex = -1
 const links = computed(() => {
-  return [...songs.value, ...playlists.value]
+  return searchValue.value ? [...songs.value, ...playlists.value] : hots.value
 })
+const songIdS = computed(() => {
+  return songs.value.map((item) => item.id)
+})
+// const playlistIdS = computed(()=>{
+//   return  playlists.value.map(item=>item.id)
+// })
 function handleKeyDown(e) {
   if (e.key === 'ArrowDown') {
     currentIndex = currentIndex + 1
-    if(currentIndex>=links.value.length)currentIndex = 0
-    e.preventDefault()
+    if (currentIndex >= links.value.length) currentIndex = 0
+
   }
   if (e.key === 'ArrowUp') {
-    currentIndex = currentIndex-1
-    if(currentIndex<0)  currentIndex = links.value.length-1
+    currentIndex = currentIndex - 1
+    if (currentIndex < 0) currentIndex = links.value.length - 1
     e.preventDefault()
   }
-  activeId.value = links.value[currentIndex]?.id
+  activeId.value = searchValue.value
+    ? links.value[currentIndex]?.id
+    : links.value[currentIndex]?.score
+  if (e.key === 'Enter') {
+    if (songIdS.value.includes(activeId.value) && searchValue.value) {
+      playSong(activeId.value)
+    } else {
+      toPlayList(activeId.value)
+    }
+
+    isSearchFouce.value = false
+    // currentIndex = currentIndex-1
+    // if(currentIndex<0)  currentIndex = links.value.length-1
+    e.preventDefault()
+  }
 }
 const songs = computed(() => {
   return (
@@ -119,7 +143,7 @@ async function playSong(id) {
 async function querySearchHot() {
   const res = await getSearchHot()
   if (res.code !== 200) return
-  hots.value = res.data
+  hots.value = res.data ?? []
   console.log(hots.value, 'hots')
 }
 </script>
@@ -141,10 +165,7 @@ async function querySearchHot() {
   overflow-y: auto;
   // padding: 20px;
 }
-.searchContainer-value {
-  width: 400px;
-  height: 100%;
-}
+
 .suggest {
   box-sizing: border-box;
   padding: 10px 0;
@@ -157,7 +178,7 @@ async function querySearchHot() {
     }
   }
   .list {
-     //margin-left: 20px;
+    //margin-left: 20px;
     //.active {
     //  background: var(--sx-color-hover);
     //}
