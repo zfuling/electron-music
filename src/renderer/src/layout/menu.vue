@@ -13,6 +13,7 @@ import { storeToRefs } from 'pinia'
 import MenuItem from './menuItem.vue'
 import { getUserPlaylist } from '@renderer/api'
 import { useUserStore } from '@renderer/store/user'
+
 const userStore = useUserStore()
 
 const { uid, userInfo } = storeToRefs(userStore)

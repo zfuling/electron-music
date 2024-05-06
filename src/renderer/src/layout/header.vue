@@ -2,16 +2,16 @@
   <div class="header drag" :class="[{ 'header-bottom': theme === 'dark' }]">
     <div class="left">
       <el-input
+        ref="searchInputRef"
+        v-model="searchValue"
         class="nodrag"
         placeholder="search"
         :prefix-icon="Search"
+        style="height: 30px"
         @focus="isSearchFouce = true"
         @blur="delayBlur"
         @input="debounceSearch"
-        style="height: 30px"
         @keypress.enter="handleSearch"
-        v-model="searchValue"
-        ref="searchInputRef"
       />
     </div>
     <div class="right nodrag">

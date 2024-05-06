@@ -5,6 +5,7 @@ import { useGlobalStore } from '@renderer/store/global'
 import { useMusicStore } from '@renderer/store/music'
 import { getSongDetail } from '@renderer/api'
 import { createSong } from '@renderer/utils'
+
 const globalStore = useGlobalStore()
 const { setPlayingState, setPlayerShow } = useMusicStore()
 onMounted(() => {
@@ -18,6 +19,7 @@ window.api.setpalySaate((_envet, data) => {
   setPlayingState(data)
   setPlayerShow(data)
 })
+
 async function genSonglist(playlist) {
   const trackIds = playlist.map((item) => item.split('-')[1].split('.')[0])
   const songDetails = await getSongDetail(trackIds.slice(0, trackIds.length))

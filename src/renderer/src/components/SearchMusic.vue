@@ -6,29 +6,26 @@
           <Icon type="yinyue" :size="20"></Icon>
           <span>单曲</span>
         </div>
-        <div
-          class="list"
-          v-for="(item, index) in songs"
-          :key="index"
-          @click="playSong(item.id)"
-          :class="[atviveId === item.id]"
-        >
-          <div class="item" v-html="item?.name"></div>
+        <div v-for="(item, index) in songs" :key="index" class="list" @click="playSong(item.id)">
+          <div
+            class="item"
+            :class="[+activeId === +item.id ? 'item-active' : '']"
+            v-html="item?.name"
+          ></div>
         </div>
       </div>
-      <div style="margin-top: 10px" v-if="playlists.length > 0">
+      <div v-if="playlists.length > 0" style="margin-top: 10px">
         <div class="title">
           <Icon type="playlist-menu" :size="20"></Icon>
           <span>歌单</span>
         </div>
         <div
-          class="list"
           v-for="(item, index) in playlists"
           :key="index"
+          class="list"
           @click="toPlayList(item.id)"
-          :class="[atviveId === item.id]"
         >
-          <div class="item" v-html="item?.name"></div>
+          <div class="item" v-html="item?.name"     :class="[+activeId === +item.id ? 'item-active' : '']"></div>
         </div>
       </div>
     </div>
@@ -54,16 +51,23 @@ onMounted(() => {
   querySearchHot()
 })
 const hots = ref<Record<string, any>[]>()
-const atviveId = ref<number>()
+const activeId = ref<number>()
+let currentIndex = -1
+const links = computed(() => {
+  return [...songs.value, ...playlists.value]
+})
 function handleKeyDown(e) {
-  console.log(e)
-  // if (e.keyCode === 38 && this.selectedIndex > 0) {
-  //   // 上键
-  //   this.selectedIndex--
-  // } else if (e.keyCode === 40 && this.selectedIndex < this.items.length - 1) {
-  //   // 下键
-  //   this.selectedIndex++
-  // }
+  if (e.key === 'ArrowDown') {
+    currentIndex = currentIndex + 1
+    if(currentIndex>=links.value.length)currentIndex = 0
+    e.preventDefault()
+  }
+  if (e.key === 'ArrowUp') {
+    currentIndex = currentIndex-1
+    if(currentIndex<0)  currentIndex = links.value.length-1
+    e.preventDefault()
+  }
+  activeId.value = links.value[currentIndex]?.id
 }
 const songs = computed(() => {
   return (
@@ -153,7 +157,11 @@ async function querySearchHot() {
     }
   }
   .list {
-    // margin-left: 20px;
+     //margin-left: 20px;
+    //.active {
+    //  background: var(--sx-color-hover);
+    //}
+
     .item {
       padding: 10px 35px;
       cursor: pointer;
