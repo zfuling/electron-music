@@ -56,9 +56,7 @@ async function handlesSuggest() {
   if (!searchValue.value) return
   const res = await getSearchSuggest(searchValue.value)
   if (res.code !== 200) return
-  console.log(111)
   sugges.value = res.result
-  console.log(sugges.value)
 }
 
 const searchInputRef = ref()
