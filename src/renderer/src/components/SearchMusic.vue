@@ -68,13 +68,27 @@ const songIdS = computed(() => {
 // })
 function handleKeyDown(e) {
   if (e.key === 'ArrowDown') {
-    currentIndex = currentIndex + 1
-    if (currentIndex >= links.value.length) currentIndex = 0
+    const findIndex = links.value.findIndex((item) => item.id === activeId.value)
+    if (findIndex < links.value.length - 1) {
+      currentIndex = findIndex + 1
+    } else {
+      currentIndex = 0
+    }
+
+    // currentIndex = currentIndex + 1
+    // if (currentIndex >= links.value.length) currentIndex = 0
+    e.preventDefault()
 
   }
   if (e.key === 'ArrowUp') {
-    currentIndex = currentIndex - 1
-    if (currentIndex < 0) currentIndex = links.value.length - 1
+    const findIndex = links.value.findIndex((item) => item.id === activeId.value)
+    if (findIndex > 0) {
+      currentIndex = findIndex - 1
+    } else {
+      currentIndex = links.value.length - 1
+    }
+    // currentIndex = currentIndex - 1
+    // if (currentIndex < 0) currentIndex = links.value.length - 1
     e.preventDefault()
   }
   activeId.value = searchValue.value
